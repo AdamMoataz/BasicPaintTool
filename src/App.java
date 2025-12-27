@@ -1,11 +1,13 @@
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.plaf.ActionMapUIResource;
 
 public class App {
 
@@ -26,9 +28,15 @@ public class App {
         controls.add(colorButton);
         colorButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
+            Color color = JColorChooser.showDialog(frame, "chose a color", Color.BLACK);
+            canvas.setCurrentColor(color);
 
             }
         });
+
+        frame.setSize(800,600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
     }
 }
 
@@ -71,6 +79,14 @@ class DrawingCanvas extends JPanel {
 
     public void setCurrentColor(Color color) {
         currentColor = color;
+    }
+
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        for (LineSegment segment:segments){
+            g.setColor(segment.color);
+            g.drawLine(segment.x1, segment.y1, segment.x2, segment.y2);
+        }
     }
 
     private static class LineSegment {
